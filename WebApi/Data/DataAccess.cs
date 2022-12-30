@@ -27,10 +27,13 @@ public class DataAccess : IDataAccess
     public async Task AddImageToAlbumAsync(Image img, string albumTitle)
     {
         await _albumContext.Images.AddAsync(img);
+        
         var album = await _albumContext.Albums
-            .Include(a => a.Title)
+            .Include(a => a.Images)
             .FirstAsync(a => a.Title.Equals(albumTitle));
+        Console.WriteLine(album);
         album.Images.Add(img);
+        Console.WriteLine(album);
         _albumContext.Update(album);
         await _albumContext.SaveChangesAsync();
 
